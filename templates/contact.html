@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section id="Contact" class="container mt-5">
+  <h2 class="text-center section-title mb-4">Connect with Me</h2>
+
+  <div class="d-flex flex-column align-items-center">
+    {% for i in contact %}
+      <div class="card text-center mb-3" style="width:500px;">
+          <p class="p-3 fw-bold bg-light text-dark"><a class="text-decoration-none" href="{{i.contact_link}}">{{ i.contact_name }}</a></p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
