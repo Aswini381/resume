@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class ="chatbot">
+        <div class = "chat-header">
+
+            🤖 Portfolio AI Assistant
+        </div>
+
+        <div class = "chat-body" id="chatBody">
+            <div class="bot-message">
+                 👋 Hi! I'm your AI Portfolio Assistant.
+                <br>
+                Ask me anything about my skills, projects.
+            </div>
+        </div>
+
+        <div class = "chat-input">
+            <input type = "text" class= "form-control" placeholder ="Ask something about my portfolio...">
+            <button class = "btn  btn-primary" onclick = "sendMessage()">
+                Send
+            </button>
+</div>
+</div>
+</div>
+<script>
+
+async function sendMessage() {
+
+    // Get the input box
+    let input = document.querySelector(".chat-input input");
+
+    // Get the question typed by the user
+    let message = input.value.trim();
+
+    // Don't send an empty message
+    if (message === "") {
+        return;
+    }
+
+    // Get chat body
+    let chatBody = document.getElementById("chatBody");
+
+
+    // Display user's message
+    chatBody.innerHTML += `
+        <div class="user-message">
+            ${message}
+        </div>
+    `;
+
+
+    // Clear input box
+    input.value = "";
+
+
+    // Show temporary loading message
+    chatBody.innerHTML += `
+        <div class="bot-message" id="loadingMessage">
+            🤔 Thinking...
+        </div>
+    `;
+
+
+    // Automatically scroll to bottom
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+
+    try {
+
+        // Send question to Django
+        let response = await fetch("/chat-api/", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+
+            body: `question=${encodeURIComponent(message)}`
+        });
+
+
+        // Check HTTP response
+        console.log("Status:", response.status);
+
+
+        // Convert Django response to JSON
+        let data = await response.json();
+
+
+        // Check response in browser console
+        console.log("AI Response:", data);
+
+
+        // Remove "Thinking..."
+        let loadingMessage = document.getElementById("loadingMessage");
+
+        if (loadingMessage) {
+            loadingMessage.remove();
+        }
+
+
+        // Display AI response
+        if (data.answer) {
+
+            chatBody.innerHTML += `
+                <div class="bot-message">
+                    ${data.answer}
+                </div>
+            `;
+
+        } else {
+
+            chatBody.innerHTML += `
+                <div class="bot-message">
+                    ❌ Sorry, I couldn't get an answer.
+                </div>
+            `;
+        }
+
+
+        // Scroll to bottom
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+
+    } catch (error) {
+
+        console.error("Error:", error);
+
+
+        // Remove "Thinking..."
+        let loadingMessage = document.getElementById("loadingMessage");
+
+        if (loadingMessage) {
+            loadingMessage.remove();
+        }
+
+
+        // Display error
+        chatBody.innerHTML += `
+            <div class="bot-message">
+                ❌ Something went wrong. Please try again.
+            </div>
+        `;
+
+    }
+
+}
+
+</script>
+{% endblock %}

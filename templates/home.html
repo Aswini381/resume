@@ -2,21 +2,104 @@
 {% load static %}
 {% block content %}
 
+<div class = "container">
 
-<div class="position-relative">
+  <div class = "row align-items-center">
 
-  <img src="{% static 'images/webpage.jpg' %}" class="img-fluid" alt="Portfolio photo">
 
-  <div class="position-absolute top-50 start-0 translate-middle-y text-dark ms-5 ps-5">
-   <h1 class="fw-bold">
-  Welcome to <br class="d-md-none"> My Portfolio
-</h1>
-    <p class="fs-6 fs-md-4">Python | Django Developer</p>
-    <p class="fs-6 fs-md-4">aswinik2608@gmail.com</p>
+
+    <div class = "col-md-5 text-center m-5 ">
+      <div class = "profile mt-5">
+  <div class="profile-ring"></div>
+      <img src= {% static "images/my_photo.jpeg" %} class = "img-fluid rounded-circle" width = "400" height = "400" alt= "My_photo">
+    </div>
+  </div>
+
+    <div class = "col-md-7 text-center text-start-end mt-5">
+      <h1 class= "fw-bold mt-5">
+        Welcome to <br class = "d-md-none">My Portfolio </h1>
+        <h3> Generative AI Engineer </h3>
+       
+        <p class = "fs-4 fs-md-6 p-2"> aswinik2608@gmail.com </p>
+        <a href= "https://www.linkedin.com/in/aswinikathirvel" target = "_blank" class="btn btn-primary" style = "border-radius:30px"><i class="bi bi-linkedin"></i> LinkedIn</a>
+        <a href= "https://github.com/Aswini381" class ="btn btn-primary" style="border-radius:30px"><i class="bi bi-github"></i> GitHub</a>
+        <br>
+        <a href= "{% url "ai_assistant" %}" class = "mt-5 btn btn-dark ai-btn"> 🤖 Ask my AI Assistant anything about me </a>
+    </div> 
+
+
+    </div>
+  
+</div>
+<br>
+<hr>
+
+
+
+
+<div class="container-fluid bg-white text-center p-5" style="height:500px;">
+  <h3 class="margin">Who Am I?</h3>
+  <img src="{% static 'images/who.jpg' %}" class="img-responsive img-circle margin" style="display:inline" alt="Bird" width="350" height="350">
+ 
 </div>
 
+<div class = "m-5">
 
+<div class="container-fluid bg-light text-dark text-center" >
+            <h1 class="pt-5">{{about.about_heading}}</h1>
+            <p class="lead text-justify  fw-bold" style="max-width:800px;margin:auto;line-height:1.9;">{{about.about_description}}</p>
+        </div>
+
+      </div>
+
+
+
+
+      <br>
+<hr class="my-5">
+
+
+<div class= "m-5">
+
+<section id="projects" class="container mt-5">
+  <h2 class="text-center section-title">Projects</h2>
+
+  <div class="row">
+
+    {% for project in project %}
+    <div class="col-md-4 mb-4">
+      {% if project.image %}
+      <img src = "{{project.image.url}}" class = "card-img-top" alt ="{{project.title}}">
+      {% endif %}
+      <div class="card p-5 mb-3">
+        <h5>{{project.title}}</h5>
+        <p>{{project.description}}</p>
+    <a href="{{project.link}}" class="btn btn-primary">Go to Project</a> 
+    </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</section>
 </div>
+<br>
+<hr>
 
 
+
+
+<section id="skills" class = "container mt-5">
+  <h1 class= "text-center section-title mb-4"> Skills</h2>
+    <div class = "row justify-content-center">
+      {% for i in skill%}
+      <div class ="col-lg-6 col-md-6 col-12 mb-3">
+        <div class ="card text-center">
+          <p class = "p-3 fw-bold mb-0">{{i.skill}}</p>
+        </div> 
+      </div>
+      {% endfor%}
+    </div>
+</section>
+
+<br>
 {% endblock %}
